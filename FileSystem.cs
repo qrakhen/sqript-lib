@@ -3,7 +3,7 @@ using Qrakhen.Sqript;
 using System.Collections.Generic;
 using System.IO;
 
-namespace __Qrakhen.Sqript.Lib.FileSystem
+namespace Qrakhen.SqriptLib
 {
     public class FileInterface : Interface
     {
@@ -29,9 +29,9 @@ namespace __Qrakhen.Sqript.Lib.FileSystem
         }
 
         public override void load() {
-            define(new Call("read", new string[] { "file" }, read));
-            define(new Call("write", new string[] { "file", "content" }, write));
-            define(new Call("exists", new string[] { "file" }, exists));
+            define(new Call("read", new string[] { "file" }, read, Sqript.ValueType.STRING));
+            define(new Call("write", new string[] { "file", "content" }, write, Sqript.ValueType.BOOLEAN));
+            define(new Call("exists", new string[] { "file" }, exists, Sqript.ValueType.BOOLEAN));
         }
     }
 }

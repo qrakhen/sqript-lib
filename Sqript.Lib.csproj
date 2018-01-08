@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>Qrakhen.Sqript.Lib</AssemblyName>
-    <RootNamespace>Qrakhen.Sqript.Lib</RootNamespace>
+    <RootNamespace>Qrakhen.SqriptLib</RootNamespace>
     <Authors>Qrakhen</Authors>
     <Company>Qrakhen</Company>
     <Product>Sqript</Product>
