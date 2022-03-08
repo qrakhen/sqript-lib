@@ -3,35 +3,35 @@ using Qrakhen.Sqript;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Qrakhen.SqriptLib
-{
-    public class FileInterface : Interface
-    {
-        public FileInterface() : base("file") {
+namespace Qrakhen.SqriptLib {
 
-        }
+	public class FileInterface : Interface {
 
-        public Value exists(Dictionary<string, Value> parameters) {
-            return new Value(File.Exists(parameters["file"].str()), Qrakhen.Sqript.ValueType.BOOLEAN);
-        }
+		public FileInterface() : base("file") { }
 
-        public Value read(Dictionary<string, Value> parameters) {
-            if (!File.Exists(parameters["file"].str())) throw new Qrakhen.Sqript.Exception("could not find file '" + parameters["file"] + "'");
-            else return new Value(File.ReadAllText(parameters["file"].str()), Qrakhen.Sqript.ValueType.STRING);
-        }
+		public override void Load() {
+			Define(new Call(read, new string[] { "file" }, Sqript.ValueType.String, "read"));
+			Define(new Call(write, new string[] { "file", "content" }, Sqript.ValueType.Boolean, "write"));
+			Define(new Call(Exists, new string[] { "file" }, Sqript.ValueType.Boolean, "exists"));
+		}
 
-        public Value write(Dictionary<string, Value> parameters) {
-            string content;
-            if (parameters["content"].getValue() == null) content = "";
-            else content = parameters["content"].str();
-            File.WriteAllText(parameters["file"].str(), content);
-            return Value.TRUE;
-        }
 
-        public override void load() {
-            define(new Call("read", new string[] { "file" }, read, Sqript.ValueType.STRING));
-            define(new Call("write", new string[] { "file", "content" }, write, Sqript.ValueType.BOOLEAN));
-            define(new Call("exists", new string[] { "file" }, exists, Sqript.ValueType.BOOLEAN));
-        }
-    }
+		public QValue Exists(Dictionary<string, QValue> parameters) {
+			return new QValue(File.Exists(parameters["file"].Str()), Qrakhen.Sqript.ValueType.Boolean);
+		}
+
+		public QValue read(Dictionary<string, QValue> parameters) {
+			if (!File.Exists(parameters["file"].Str())) {
+				throw new Sqript.Exception("could not find file '" + parameters["file"] + "'");
+			} else {
+				return new QValue(File.ReadAllText(parameters["file"].Str()), Qrakhen.Sqript.ValueType.String);
+			}
+		}
+
+		public QValue write(Dictionary<string, QValue> parameters) {
+			string content = parameters["content"].GetValue() == null ? "" : parameters["content"].Str();
+			File.WriteAllText(parameters["file"].Str(), content);
+			return QValue.True;
+		}
+	}
 }
