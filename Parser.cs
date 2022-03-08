@@ -4,60 +4,57 @@ using System.Text.RegularExpressions;
 using Qrakhen.Sqript;
 
 namespace Qrakhen.SqriptLib {
+
 	public class ParserInterface : Interface {
 
-		private ConsoleColor _consoleColor = ConsoleColor.White;
+		public ParserInterface() : base("parser") { }
 
-		public ParserInterface() : base("parser") {
-
+		public override void Load() {
+			Define(new Call(toNumber, new string[] { "value" }, Sqript.ValueType.Number));
+			Define(new Call(toInt, new string[] { "value" }, Sqript.ValueType.Number));
+			Define(new Call(toDecimal, new string[] { "value" }, Sqript.ValueType.Number));
+			Define(new Call(toBool, new string[] { "value" }, Sqript.ValueType.Number));
 		}
 
-		public override void load() {
-			define(new Call(toNumber, new string[] { "value" }, Sqript.ValueType.Number));
-			define(new Call(toInt, new string[] { "value" }, Sqript.ValueType.Number));
-			define(new Call(toDecimal, new string[] { "value" }, Sqript.ValueType.Number));
-			define(new Call(toBool, new string[] { "value" }, Sqript.ValueType.Number));
-		}
-
-		public Value toNumber(Dictionary<string, Value> parameters) {
+		public QValue toNumber(Dictionary<string, QValue> parameters) {
 			if(!parameters.ContainsKey("value")) {
 				throw new ArgumentException("The needed parameter 'min' is missing!");
 			}
 			decimal number = toDecimal(parameters, "value");
-			return new Value(
+			return new QValue(
 				number,
 				Sqript.ValueType.Number
 			);
 		}
 
-		public Value toInt(Dictionary<string, Value> parameters) {
+		public QValue toInt(Dictionary<string, QValue> parameters) {
 			if(!parameters.ContainsKey("value")) {
 				throw new ArgumentException("The needed parameter 'min' is missing!");
 			}
 			int number = toInt(parameters, "value");
-			return new Value(
+			return new QValue(
 				number,
 				Sqript.ValueType.Integer
 			);
 		}
 
-		public Value toDecimal(Dictionary<string, Value> parameters) {
+		public QValue toDecimal(Dictionary<string, QValue> parameters) {
 			if(!parameters.ContainsKey("value")) {
 				throw new ArgumentException("The needed parameter 'min' is missing!");
 			}
 			double number = toDouble(parameters, "value");
-			return new Value(
+			return new QValue(
 				number,
 				Sqript.ValueType.Decimal
 			);
 		}
 
-		public Value toBool(Dictionary<string, Value> parameters) {
+		public QValue toBool(Dictionary<string, QValue> parameters) {
 			if(!parameters.ContainsKey("value")) {
 				throw new ArgumentException("The needed parameter 'min' is missing!");
 			}
 			bool number = toBool(parameters, "value");
-			return new Value(
+			return new QValue(
 				number,
 				Sqript.ValueType.Boolean
 			);
@@ -65,63 +62,63 @@ namespace Qrakhen.SqriptLib {
 
 		#region Helper
 
-		private decimal toDecimal(Dictionary<string, Value> parameters, string name) {
-			if(parameters[name].type != Sqript.ValueType.Integer
-				&& parameters[name].type != Sqript.ValueType.Decimal
-				&& parameters[name].type != Sqript.ValueType.Number
-				&& parameters[name].type != Sqript.ValueType.Any
-				&& parameters[name].type != Sqript.ValueType.String) {
-				throw new ArgumentException("The parameter '" + name + "' should have they type 'Decimal' but it is: " + parameters[name].type);
+		private decimal toDecimal(Dictionary<string, QValue> parameters, string name) {
+			if(parameters[name].Type != Sqript.ValueType.Integer
+				&& parameters[name].Type != Sqript.ValueType.Decimal
+				&& parameters[name].Type != Sqript.ValueType.Number
+				&& parameters[name].Type != Sqript.ValueType.Any
+				&& parameters[name].Type != Sqript.ValueType.String) {
+				throw new ArgumentException("The parameter '" + name + "' should have they type 'Decimal' but it is: " + parameters[name].Type);
 			}
 			try {
-				return decimal.Parse(parameters[name].value.ToString());
+				return decimal.Parse(parameters[name].Value.ToString());
 			} catch(FormatException) {
-				throw new ArgumentException("The parameter '" + name + "' should have they type 'Decimal' but it is: " + parameters[name].type);
+				throw new ArgumentException("The parameter '" + name + "' should have they type 'Decimal' but it is: " + parameters[name].Type);
 			}
 		}
 
-		private int toInt(Dictionary<string, Value> parameters, string name) {
-			if(parameters[name].type != Sqript.ValueType.Integer
-				&& parameters[name].type != Sqript.ValueType.Decimal
-				&& parameters[name].type != Sqript.ValueType.Number
-				&& parameters[name].type != Sqript.ValueType.Any
-				&& parameters[name].type != Sqript.ValueType.String) {
-				throw new ArgumentException("The parameter '" + name + "' should have they type 'Integer' but it is: " + parameters[name].type);
+		private int toInt(Dictionary<string, QValue> parameters, string name) {
+			if(parameters[name].Type != Sqript.ValueType.Integer
+				&& parameters[name].Type != Sqript.ValueType.Decimal
+				&& parameters[name].Type != Sqript.ValueType.Number
+				&& parameters[name].Type != Sqript.ValueType.Any
+				&& parameters[name].Type != Sqript.ValueType.String) {
+				throw new ArgumentException("The parameter '" + name + "' should have they type 'Integer' but it is: " + parameters[name].Type);
 			}
 			try {
-				return int.Parse(parameters[name].value.ToString());
+				return int.Parse(parameters[name].Value.ToString());
 			} catch(FormatException) {
-				throw new ArgumentException("The parameter '" + name + "' should have they type 'Integer' but it is: " + parameters[name].type);
+				throw new ArgumentException("The parameter '" + name + "' should have they type 'Integer' but it is: " + parameters[name].Type);
 			}
 		}
 
-		private double toDouble(Dictionary<string, Value> parameters, string name) {
-			if(parameters[name].type != Sqript.ValueType.Integer
-				&& parameters[name].type != Sqript.ValueType.Decimal
-				&& parameters[name].type != Sqript.ValueType.Number
-				&& parameters[name].type != Sqript.ValueType.Any
-				&& parameters[name].type != Sqript.ValueType.String) {
-				throw new ArgumentException("The parameter '" + name + "' should have they type 'Double' but it is: " + parameters[name].type);
+		private double toDouble(Dictionary<string, QValue> parameters, string name) {
+			if(parameters[name].Type != Sqript.ValueType.Integer
+				&& parameters[name].Type != Sqript.ValueType.Decimal
+				&& parameters[name].Type != Sqript.ValueType.Number
+				&& parameters[name].Type != Sqript.ValueType.Any
+				&& parameters[name].Type != Sqript.ValueType.String) {
+				throw new ArgumentException("The parameter '" + name + "' should have they type 'Double' but it is: " + parameters[name].Type);
 			}
 			try {
-				return double.Parse(parameters[name].value.ToString());
+				return double.Parse(parameters[name].Value.ToString());
 			} catch(FormatException) {
-				throw new ArgumentException("The parameter '" + name + "' should have they type 'Double' but it is: " + parameters[name].type);
+				throw new ArgumentException("The parameter '" + name + "' should have they type 'Double' but it is: " + parameters[name].Type);
 			}
 		}
 
-		private bool toBool(Dictionary<string, Value> parameters, string name) {
-			if(parameters[name].type != Sqript.ValueType.Integer
-				&& parameters[name].type != Sqript.ValueType.Decimal
-				&& parameters[name].type != Sqript.ValueType.Number
-				&& parameters[name].type != Sqript.ValueType.Any
-				&& parameters[name].type != Sqript.ValueType.String) {
-				throw new ArgumentException("The parameter '" + name + "' should have they type 'Boolean' but it is: " + parameters[name].type);
+		private bool toBool(Dictionary<string, QValue> parameters, string name) {
+			if(parameters[name].Type != Sqript.ValueType.Integer
+				&& parameters[name].Type != Sqript.ValueType.Decimal
+				&& parameters[name].Type != Sqript.ValueType.Number
+				&& parameters[name].Type != Sqript.ValueType.Any
+				&& parameters[name].Type != Sqript.ValueType.String) {
+				throw new ArgumentException("The parameter '" + name + "' should have they type 'Boolean' but it is: " + parameters[name].Type);
 			}
 			try {
-				return bool.Parse(parameters[name].value.ToString());
+				return bool.Parse(parameters[name].Value.ToString());
 			} catch(FormatException) {
-				throw new ArgumentException("The parameter '" + name + "' should have they type 'Boolean' but it is: " + parameters[name].type);
+				throw new ArgumentException("The parameter '" + name + "' should have they type 'Boolean' but it is: " + parameters[name].Type);
 			}
 		}
 
