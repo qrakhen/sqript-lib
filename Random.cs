@@ -8,9 +8,17 @@ namespace Qrakhen.SqriptLib {
 
 		private Random _random;
 
+
 		public RandomInterface() : base("random") {
 			_random = new Random();
 		}
+
+		public override void Load() {
+			Define(new Call(set_seed, new string[] { "seed" }, Sqript.ValueType.Null));
+			Define(new Call(range, new string[] { "min", "max" }, Sqript.ValueType.Integer));
+			Define(new Call(rangeD, Sqript.ValueType.Decimal));
+		}
+
 
 		public QValue set_seed(Dictionary<string, QValue> parameters) {
 			if(!parameters.ContainsKey("seed")) {
@@ -42,11 +50,7 @@ namespace Qrakhen.SqriptLib {
 			);
 		}
 
-		public override void Load() {
-			Define(new Call(set_seed, new string[] { "seed" }, Sqript.ValueType.Null));
-			Define(new Call(range, new string[] { "min", "max" }, Sqript.ValueType.Integer));
-			Define(new Call(rangeD, Sqript.ValueType.Decimal));
-		}
+		#region Helper
 
 		private int ToInt(Dictionary<string, QValue> parameters, string name) {
 			if(parameters[name].Type != Sqript.ValueType.Integer
@@ -77,5 +81,6 @@ namespace Qrakhen.SqriptLib {
 				throw new ArgumentException("The parameter '" + name + "' should have they type 'Decimal' but it is: " + parameters[name].Type);
 			}
 		}
+		#endregion
 	}
 }

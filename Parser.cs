@@ -16,6 +16,7 @@ namespace Qrakhen.SqriptLib {
 			Define(new Call(toBool, new string[] { "value" }, Sqript.ValueType.Number));
 		}
 
+
 		public QValue toNumber(Dictionary<string, QValue> parameters) {
 			if(!parameters.ContainsKey("value")) {
 				throw new ArgumentException("The needed parameter 'min' is missing!");

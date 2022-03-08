@@ -9,6 +9,13 @@ namespace Qrakhen.SqriptLib {
 
 		public FileInterface() : base("file") { }
 
+		public override void Load() {
+			Define(new Call(read, new string[] { "file" }, Sqript.ValueType.String, "read"));
+			Define(new Call(write, new string[] { "file", "content" }, Sqript.ValueType.Boolean, "write"));
+			Define(new Call(Exists, new string[] { "file" }, Sqript.ValueType.Boolean, "exists"));
+		}
+
+
 		public QValue Exists(Dictionary<string, QValue> parameters) {
 			return new QValue(File.Exists(parameters["file"].Str()), Qrakhen.Sqript.ValueType.Boolean);
 		}
@@ -25,12 +32,6 @@ namespace Qrakhen.SqriptLib {
 			string content = parameters["content"].GetValue() == null ? "" : parameters["content"].Str();
 			File.WriteAllText(parameters["file"].Str(), content);
 			return QValue.True;
-		}
-
-		public override void Load() {
-			Define(new Call(read, new string[] { "file" }, Sqript.ValueType.String, "read"));
-			Define(new Call(write, new string[] { "file", "content" }, Sqript.ValueType.Boolean, "write"));
-			Define(new Call(Exists, new string[] { "file" }, Sqript.ValueType.Boolean, "exists"));
 		}
 	}
 }
